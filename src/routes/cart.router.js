@@ -5,7 +5,18 @@ const cartRouter = Router();
 const pathFile = "./src/data/carts.json"
 const cartManager = new CartManager(pathFile);
 
-//1) Create cart
+//Get all cart
+cartRouter.get("/all", async (req, res) => {
+    try {
+        const carts = await cartManager.readCarts();
+        res.json(carts);
+    } catch (error) {
+        console.log("Error al listar los carritos");
+        res.status(500).json({error: "Error interno del servidor"})
+    }
+});
+
+// Create cart
 cartRouter.get("/", async (req, res) => {
     try {
         const newCart = await cartManager.createCart();
@@ -16,7 +27,7 @@ cartRouter.get("/", async (req, res) => {
     }
 });
 
-//2) List all the products that belong to a cart.
+// List all the products that belong to a cart
 cartRouter.get("/:cid", async (req, res) => {
     const cartId = parseInt(req.params.cid);
     try {
@@ -28,7 +39,7 @@ cartRouter.get("/:cid", async (req, res) => {
     }
 });
 
-// 3) Add products to a cart.
+// Add products to a cart
 cartRouter.post("/:cid/product/:pid", async (req, res) => {
     const cartId = parseInt(req.params.cid);
     const productId = req.params.pid;
@@ -42,6 +53,5 @@ cartRouter.post("/:cid/product/:pid", async (req, res) => {
         res.status(500).json({ error: "Error interno del servidor" });
     }
 });
-
 
 export default cartRouter;

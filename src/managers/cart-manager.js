@@ -8,8 +8,10 @@ class CartManager {
 
         // Load the carts stored in the file
         this.readCarts();
-    }
 
+        
+    }
+    
     async readCarts() {
         try {
             const data = await fs.readFile(this.path, "utf-8");
@@ -21,6 +23,8 @@ class CartManager {
                 this.lastId = Math.max(...this.carts.map(cart => cart.id ));
                 //Method to find the highest ID in the cart array.
             }
+
+            return this.carts;
         } catch (error) {
              //Si no existe el archivo, lo voy a crear: 
              await this.saveCart(); 
